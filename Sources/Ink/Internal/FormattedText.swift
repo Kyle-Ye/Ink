@@ -27,11 +27,18 @@ internal struct FormattedText: Readable, HTMLConvertible, PlainTextConvertible {
 
     func html(usingURLs urls: NamedURLCollection,
               modifiers: ModifierCollection) -> String {
-        components.reduce(into: "") { string, component in
+        var emptyLine = false
+        return components.reduce(into: "") { string, component in
             switch component {
             case .linebreak:
                 string.append("<br>")
             case .text(let text):
+                if text.isEmpty {
+                    emptyLine = true
+                } else if emptyLine {
+                    string.append("<br>")
+                    emptyLine = false
+                }
                 string.append(String(text))
             case .styleMarker(let marker):
                 let html = marker.html(usingURLs: urls, modifiers: modifiers)
