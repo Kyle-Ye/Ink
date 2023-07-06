@@ -204,22 +204,3 @@ final class TableTests: XCTestCase {
         """)
     }
 }
-
-extension TableTests {
-    static var allTests: Linux.TestList<TableTests> {
-        return [
-            ("testTableWithoutHeader", testTableWithoutHeader),
-            ("testTableWithHeader", testTableWithHeader),
-            ("testTableWithUnalignedColumns", testTableWithUnalignedColumns),
-            ("testTableWithOnlyHeader", testTableWithOnlyHeader),
-            ("testIncompleteTable", testIncompleteTable),
-            ("testInvalidTable", testInvalidTable),
-            ("testTableBetweenParagraphs", testTableBetweenParagraphs),
-            ("testTableWithUnevenColumns", testTableWithUnevenColumns),
-            ("testTableWithInternalMarkdown", testTableWithInternalMarkdown),
-            ("testTableWithAlignment", testTableWithAlignment),
-            ("testMissingPipeEndsTable", testMissingPipeEndsTable),
-            ("testHeaderNotParsedForColumnCountMismatch", testHeaderNotParsedForColumnCountMismatch),
-        ]
-    }
-}

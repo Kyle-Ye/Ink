@@ -60,17 +60,3 @@ final class HeadingTests: XCTestCase {
     }
 }
 
-extension HeadingTests {
-    static var allTests: Linux.TestList<HeadingTests> {
-        return [
-            ("testHeading", testHeading),
-            ("testHeadingsSeparatedBySingleNewline", testHeadingsSeparatedBySingleNewline),
-            ("testHeadingsWithLeadingNumbers", testHeadingsWithLeadingNumbers),
-            ("testHeadingWithPreviousWhitespace", testHeadingWithPreviousWhitespace),
-            ("testHeadingWithPreviousNewlineAndWhitespace", testHeadingWithPreviousNewlineAndWhitespace),
-            ("testInvalidHeaderLevel", testInvalidHeaderLevel),
-            ("testRemovingTrailingMarkersFromHeading", testRemovingTrailingMarkersFromHeading),
-            ("testHeadingWithOnlyTrailingMarkers", testHeadingWithOnlyTrailingMarkers)
-        ]
-    }
-}

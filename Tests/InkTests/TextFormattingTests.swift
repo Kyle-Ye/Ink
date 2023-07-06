@@ -172,39 +172,3 @@ final class TextFormattingTests: XCTestCase {
         XCTAssertEqual(html, "<p>Line 1<br>Line 2</p>")
     }
 }
-
-extension TextFormattingTests {
-    static var allTests: Linux.TestList<TextFormattingTests> {
-        return [
-            ("testParagraph", testParagraph),
-            ("testParagraphs", testParagraphs),
-            ("testDosParagraphs", testDosParagraphs),
-            ("testItalicText", testItalicText),
-            ("testBoldText", testBoldText),
-            ("testItalicBoldText", testItalicBoldText),
-            ("testItalicBoldTextWithSeparateStartMarkers", testItalicBoldTextWithSeparateStartMarkers),
-            ("testItalicTextWithinBoldText", testItalicTextWithinBoldText),
-            ("testBoldTextWithinItalicText", testBoldTextWithinItalicText),
-            ("testItalicTextWithExtraLeadingMarkers", testItalicTextWithExtraLeadingMarkers),
-            ("testBoldTextWithExtraLeadingMarkers", testBoldTextWithExtraLeadingMarkers),
-            ("testItalicTextWithExtraTrailingMarkers", testItalicTextWithExtraTrailingMarkers),
-            ("testBoldTextWithExtraTrailingMarkers", testBoldTextWithExtraTrailingMarkers),
-            ("testItalicBoldTextWithExtraTrailingMarkers", testItalicBoldTextWithExtraTrailingMarkers),
-            ("testUnterminatedItalicMarker", testUnterminatedItalicMarker),
-            ("testUnterminatedBoldMarker", testUnterminatedBoldMarker),
-            ("testUnterminatedItalicBoldMarker", testUnterminatedItalicBoldMarker),
-            ("testUnterminatedItalicMarkerWithinBoldText", testUnterminatedItalicMarkerWithinBoldText),
-            ("testUnterminatedBoldMarkerWithinItalicText", testUnterminatedBoldMarkerWithinItalicText),
-            ("testStrikethroughText", testStrikethroughText),
-            ("testSingleTildeWithinStrikethroughText", testSingleTildeWithinStrikethroughText),
-            ("testUnterminatedStrikethroughMarker", testUnterminatedStrikethroughMarker),
-            ("testEncodingSpecialCharacters", testEncodingSpecialCharacters),
-            ("testSingleLineBlockquote", testSingleLineBlockquote),
-            ("testMultiLineBlockquote", testMultiLineBlockquote),
-            ("testEscapingSymbolsWithBackslash", testEscapingSymbolsWithBackslash),
-            ("testListAfterFormattedText", testListAfterFormattedText),
-            ("testDoubleSpacedHardLinebreak", testDoubleSpacedHardLinebreak),
-            ("testEscapedHardLinebreak", testEscapedHardLinebreak)
-        ]
-    }
-}

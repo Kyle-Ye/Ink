@@ -1,10 +1,10 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.8
 
 /**
-*  Ink
-*  Copyright (c) John Sundell 2019
-*  MIT license, see LICENSE file for details
-*/
+ *  Ink
+ *  Copyright (c) John Sundell 2019
+ *  MIT license, see LICENSE file for details
+ */
 
 import PackageDescription
 
@@ -17,6 +17,6 @@ let package = Package(
     targets: [
         .target(name: "Ink"),
         .target(name: "InkCLI", dependencies: ["Ink"]),
-        .testTarget(name: "InkTests", dependencies: ["Ink"])
+        .testTarget(name: "InkTests", dependencies: ["Ink"]),
     ]
 )

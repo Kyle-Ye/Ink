@@ -153,23 +153,3 @@ final class ListTests: XCTestCase {
         XCTAssertEqual(html, "<ul><li>One</li><li>Two</li><li>Three</li></ul>")
     }
 }
-
-extension ListTests {
-    static var allTests: Linux.TestList<ListTests> {
-        return [
-            ("testOrderedList", testOrderedList),
-            ("test10DigitOrderedList", test10DigitOrderedList),
-            ("testOrderedListParentheses", testOrderedListParentheses),
-            ("testOrderedListWithoutIncrementedNumbers", testOrderedListWithoutIncrementedNumbers),
-            ("testOrderedListWithInvalidNumbers", testOrderedListWithInvalidNumbers),
-            ("testUnorderedList", testUnorderedList),
-            ("testMixedUnorderedList", testMixedUnorderedList),
-            ("testMixedList", testMixedList),
-            ("testUnorderedListWithMultiLineItem", testUnorderedListWithMultiLineItem),
-            ("testUnorderedListWithNestedList", testUnorderedListWithNestedList),
-            ("testUnorderedListWithInvalidMarker", testUnorderedListWithInvalidMarker),
-            ("testOrderedIndentedList", testUnorderedIndentedList),
-            ("testUnorderedIndentedList", testUnorderedIndentedList),
-        ]
-    }
-}
