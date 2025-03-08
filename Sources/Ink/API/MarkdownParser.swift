@@ -42,7 +42,7 @@ public struct MarkdownParser {
     public func parse(_ markdown: String) -> Markdown {
         var reader = Reader(string: markdown)
         var fragments = [ParsedFragment]()
-        var urlsByName = [String : URL]()
+        var references = NamedReferenceCollection()
         var titleHeading: Heading?
         var metadata: Metadata?
 
@@ -52,32 +52,31 @@ public struct MarkdownParser {
 
             do {
                 if metadata == nil, fragments.isEmpty, reader.currentCharacter == "-" {
-                    if let parsedMetadata = try? Metadata.readOrRewind(using: &reader) {
+                    if let parsedMetadata = try? Metadata.readOrRewind(using: &reader,
+                                                                       references: &references) {
                         metadata = parsedMetadata.applyingModifiers(modifiers)
                         continue
                     }
                 }
 
                 guard reader.currentCharacter != "[" else {
-                    let declaration = try URLDeclaration.readOrRewind(using: &reader)
-                    urlsByName[declaration.name] = declaration.url
+                    do {
+                        let declaration = try URLDeclaration.readOrRewind(using: &reader,
+                                                                          references: &references)
+                        references.append(urlDeclaration: declaration)
+                    } catch {
+                        let declaration = try FootnoteDeclaration.readOrRewind(using: &reader,
+                                                                               references: &references)
+                        references.append(footnoteDeclaration: declaration)
+                    }
                     continue
                 }
 
                 let type = fragmentType(for: reader.currentCharacter,
                                         nextCharacter: reader.nextCharacter)
-
-                #if swift(>=5.3) && swift(<5.4) && os(Linux)
-                // inline function call to work around https://bugs.swift.org/browse/SR-13645
-                let fragment: ParsedFragment = try {
-                    let startIndex = reader.currentIndex
-                    let fragment = try type.readOrRewind(using: &reader)
-                    let rawString = reader.characters(in: startIndex..<reader.currentIndex)
-                    return ParsedFragment(fragment: fragment, rawString: rawString)
-                }()
-                #else
-                let fragment = try makeFragment(using: type.readOrRewind, reader: &reader)
-                #endif
+                let fragment = try makeFragment(using: type.readOrRewind,
+                                                reader: &reader,
+                                                references: &references)
                 fragments.append(fragment)
 
                 if titleHeading == nil, let heading = fragment.fragment as? Heading {
@@ -86,16 +85,21 @@ public struct MarkdownParser {
                     }
                 }
             } catch {
-                let paragraph = makeFragment(using: Paragraph.read, reader: &reader)
+                let paragraph = makeFragment(using: Paragraph.read,
+                                             reader: &reader,
+                                             references: &references)
                 fragments.append(paragraph)
             }
         }
 
-        let urls = NamedURLCollection(urlsByName: urlsByName)
+        if let footnoteList = references.footnoteList(modifiers: modifiers) {
+            fragments.append(ParsedFragment(fragment: footnoteList,
+                                            rawString: ""))
+        }
 
         let html = fragments.reduce(into: "") { result, wrapper in
             let html = wrapper.fragment.html(
-                usingURLs: urls,
+                usingReferences: references,
                 rawString: wrapper.rawString,
                 applyingModifiers: modifiers
             )
@@ -117,16 +121,17 @@ private extension MarkdownParser {
         var rawString: Substring
     }
 
-    func makeFragment(using closure: (inout Reader) throws -> Fragment,
-                      reader: inout Reader) rethrows -> ParsedFragment {
+    func makeFragment(using closure: (inout Reader, inout NamedReferenceCollection) throws -> ReadableFragment,
+                      reader: inout Reader,
+                      references: inout NamedReferenceCollection) rethrows -> ParsedFragment {
         let startIndex = reader.currentIndex
-        let fragment = try closure(&reader)
+        let fragment = try closure(&reader, &references)
         let rawString = reader.characters(in: startIndex..<reader.currentIndex)
         return ParsedFragment(fragment: fragment, rawString: rawString)
     }
 
     func fragmentType(for character: Character,
-                      nextCharacter: Character?) -> Fragment.Type {
+                      nextCharacter: Character?) -> ReadableFragment.Type {
         switch character {
         case "#": return Heading.self
         case "!": return Image.self

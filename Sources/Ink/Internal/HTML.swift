@@ -4,12 +4,13 @@
 *  MIT license, see LICENSE file for details
 */
 
-internal struct HTML: Fragment {
+internal struct HTML: ReadableFragment {
     var modifierTarget: Modifier.Target { .html }
 
     private var string: Substring
 
-    static func read(using reader: inout Reader) throws -> HTML {
+    static func read(using reader: inout Reader,
+                     references: inout NamedReferenceCollection) throws -> HTML {
         let startIndex = reader.currentIndex
         let rootElement = try reader.readHTMLElement()
 
@@ -51,7 +52,7 @@ internal struct HTML: Fragment {
         return HTML(string: html)
     }
 
-    func html(usingURLs urls: NamedURLCollection,
+    func html(usingReferences references: NamedReferenceCollection,
               modifiers: ModifierCollection) -> String {
         String(string)
     }

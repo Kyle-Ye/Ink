@@ -4,12 +4,13 @@
 *  MIT license, see LICENSE file for details
 */
 
-struct InlineCode: Fragment {
+struct InlineCode: ReadableFragment {
     var modifierTarget: Modifier.Target { .inlineCode }
 
     private var code: String
 
-    static func read(using reader: inout Reader) throws -> InlineCode {
+    static func read(using reader: inout Reader,
+                     references: inout NamedReferenceCollection) throws -> InlineCode {
         try reader.read("`")
         var code = ""
 
@@ -34,7 +35,7 @@ struct InlineCode: Fragment {
         throw Reader.Error()
     }
 
-    func html(usingURLs urls: NamedURLCollection,
+    func html(usingReferences references: NamedReferenceCollection,
               modifiers: ModifierCollection) -> String {
         return "<code>\(code)</code>"
     }
